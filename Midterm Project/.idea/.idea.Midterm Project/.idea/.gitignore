@@ -1,0 +1,13 @@
+﻿# Default ignored files
+/shelf/
+/workspace.xml
+# Rider ignored files
+/contentModel.xml
+/modules.xml
+/projectSettingsUpdater.xml
+/.idea.Midterm Project.iml
+# Datasource local storage ignored files
+/../../../../../../../../../../:\Users\Alessia\Desktop\CodeLab1_2021\adi7541-HW-Week6-MIDTERM\Midterm Project\.idea\.idea.Midterm Project\.idea/dataSources/
+/dataSources.local.xml
+# Editor-based HTTP Client requests
+/httpRequests/
