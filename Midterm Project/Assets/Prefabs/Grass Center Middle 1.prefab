@@ -11,6 +11,7 @@ GameObject:
   - component: {fileID: 837628806623223500}
   - component: {fileID: 837628806623223501}
   - component: {fileID: 837628806623223503}
+  - component: {fileID: 9115569601014194844}
   m_Layer: 0
   m_Name: Grass Center Middle 1
   m_TagString: Shore
@@ -112,3 +113,24 @@ PolygonCollider2D:
       - {x: -0.32, y: -0.32}
       - {x: 0.32, y: -0.32}
       - {x: 0.32, y: 0.32}
+--- !u!50 &9115569601014194844
+Rigidbody2D:
+  serializedVersion: 4
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 837628806623223498}
+  m_BodyType: 2
+  m_Simulated: 1
+  m_UseFullKinematicContacts: 0
+  m_UseAutoMass: 0
+  m_Mass: 1
+  m_LinearDrag: 0
+  m_AngularDrag: 0.05
+  m_GravityScale: 1
+  m_Material: {fileID: 0}
+  m_Interpolate: 0
+  m_SleepingMode: 1
+  m_CollisionDetection: 0
+  m_Constraints: 0

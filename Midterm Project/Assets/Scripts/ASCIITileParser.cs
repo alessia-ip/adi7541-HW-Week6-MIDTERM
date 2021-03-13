@@ -5,6 +5,8 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Windows;
 using File = System.IO.File;
+using Random = UnityEngine.Random;
+
 
 public class ASCIITileParser : MonoBehaviour
 {
@@ -53,14 +55,23 @@ public class ASCIITileParser : MonoBehaviour
     public GameObject grassBottomMiddle2; //o
     public GameObject grassBottomRight; //q
 
+    [Header("Terrain Prefabs - Grass Sand")]
+    public GameObject grassSandTR; //w
+    public GameObject grassSandTL; //x
+    public GameObject grassSandBR; //y
+    public GameObject grassSandBL; //z
+    
     [Header("Player Prefab")] 
     public GameObject playerBoatBlue;
     public GameObject playerBoatRed;
     public GameObject playerBoatYellow;
+    public GameObject pirate;
 
     [Header("Object Prefabs")] 
     public GameObject gold;
-
+    public GameObject rock1;
+    public GameObject rock2;
+    public GameObject rock3;
 
     // Start is called before the first frame update
     void Start()
@@ -94,6 +105,9 @@ public class ASCIITileParser : MonoBehaviour
 
     void ShoreParser()
     {
+        GameObject level = new GameObject();
+        level.name = "Level";
+        
         string[] terrain = File.ReadAllLines(PATH_TO_TERRAIN);
         
         for (int y = 0; y < terrain.Length; y++)
@@ -103,13 +117,18 @@ public class ASCIITileParser : MonoBehaviour
 
             for (int x = 0; x < characters.Length; x++)
             {
-                GameObject level = new GameObject();
                 
                 GameObject newObj;
                 char c = characters[x];
 
                 switch (c)
                 {
+                    case 'P': //pirate ship
+                        newObj = Instantiate<GameObject>(playerBoatBlue);
+                        break;
+                    case 'p': //pirate
+                        newObj = Instantiate<GameObject>(pirate);
+                        break;
                     case '1': 
                         newObj = Instantiate<GameObject>(sandbarTopLeft);
                         break;
@@ -148,6 +167,74 @@ public class ASCIITileParser : MonoBehaviour
                         break;
                     case 'd':
                         newObj = Instantiate<GameObject>(grassTopRight);
+                        break;
+                    case 'e':
+                        newObj = Instantiate<GameObject>(grassCenterLeft);
+                        break;
+                    case 'f':
+                        newObj = Instantiate<GameObject>(grassCenterLeft2);
+                        break;
+                    case 'g':
+                        newObj = Instantiate<GameObject>(grassCenterMiddle);
+                        break;
+                    case 'h':
+                        newObj = Instantiate<GameObject>(grassCenterMiddle2);
+                        break;
+                    case 'i':
+                        newObj = Instantiate<GameObject>(grassCenterMiddle3);
+                        break;
+                    case 'j':
+                        newObj = Instantiate<GameObject>(grassCenterMiddle4);
+                        break;
+                    case 'k':
+                        newObj = Instantiate<GameObject>(grassCenterRight);
+                        break;
+                    case 'l':
+                        newObj = Instantiate<GameObject>(grassCenterRight2);
+                        break;
+                    case 'm':
+                        newObj = Instantiate<GameObject>(grassBottomLeft);
+                        break;
+                    case 'n':
+                        newObj = Instantiate<GameObject>(grassBottomMiddle);
+                        break;
+                    case 'o':
+                        newObj = Instantiate<GameObject>(grassBottomMiddle2);
+                        break;
+                    case 'q':
+                        newObj = Instantiate<GameObject>(grassBottomRight);
+                        break;
+                    case 'w':
+                        newObj = Instantiate<GameObject>(grassSandTR);
+                        break;
+                    case 'x':
+                        newObj = Instantiate<GameObject>(grassSandTL);
+                        break;
+                    case 'y':
+                        newObj = Instantiate<GameObject>(grassSandBR);
+                        break;
+                    case 'z':
+                        newObj = Instantiate<GameObject>(grassSandBL);
+                        break;
+                    case 'R':
+                        var rock = Random.Range(1, 3);
+                        Debug.Log(rock);
+                        switch (rock)
+                        {
+                            case 1:
+                                Debug.Log("Switch");
+                                newObj = Instantiate<GameObject>(rock1);
+                                break; 
+                            case 2:
+                                newObj = Instantiate<GameObject>(rock2);
+                                break; 
+                            case 3:
+                                newObj = Instantiate<GameObject>(rock3);
+                                break; 
+                            default:
+                                newObj = Instantiate<GameObject>(rock1);
+                                break;
+                        }
                         break;
                     default:
                         newObj = null;
