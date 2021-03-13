@@ -23,9 +23,15 @@ public class ASCIITileParser : MonoBehaviour
     private const string DIR = "/ASCII/";
     private string PATH_TO_TERRAIN;
     private string PATH_TO_OBJECTIVES;
+
+    private string FILE_NAME_SAVE_TIME = "Time.txt";
+    private string FILE_NAME_SAVE_GOLD = "Gold.txt";
+    private const string DIR_LOGS = "/Logs/";
     
-    public GameObject instance;
-    
+    private string FILE_PATH_JSON;
+
+    private Vector2 playerStartPos;
+
     [Header("Terrain Prefabs - Sand")] 
     public GameObject sandbarTopLeft; //char 1
     public GameObject sandbarTopMiddle; //char 2
@@ -76,40 +82,37 @@ public class ASCIITileParser : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        //set instance
-        if (instance != null)
-        {
-            instance = this.gameObject;
-            DontDestroyOnLoad(this.gameObject);
-        }
-        else
-        {
-            Destroy(this.gameObject);
-        }
-
+        Random.seed = System.DateTime.Now.Second;
+        
         PATH_TO_TERRAIN = Application.dataPath + DIR + FILE_NAME_TERRAIN;
         PATH_TO_TERRAIN = PATH_TO_TERRAIN.Replace("Num", levelNum + "");
         
         PATH_TO_OBJECTIVES = Application.dataPath + DIR + FILE_NAME_OBJECTIVES;
-        PATH_TO_OBJECTIVES = PATH_TO_OBJECTIVES.Replace("Num", levelNum + "");
+        PATH_TO_OBJECTIVES = PATH_TO_OBJECTIVES.Replace("Num", Random.Range(1,3) + "");
 
+        FILE_PATH_JSON = Application.dataPath + "/" + name + ".json";
+        if (File.Exists(FILE_PATH_JSON))
+        {
+            string jsonText = File.ReadAllText(FILE_PATH_JSON);
+            Vector3 savedPos = JsonUtility.FromJson<Vector3>(jsonText);
+            playerStartPos = savedPos; 
+        }
         
         ShoreParser();
     }
 
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
+
+
 
     void ShoreParser()
     {
         GameObject level = new GameObject();
         level.name = "Level";
+
+        //terrain
         
         string[] terrain = File.ReadAllLines(PATH_TO_TERRAIN);
-        
+
         for (int y = 0; y < terrain.Length; y++)
         {
             string currentLine = terrain[y]; //this is the current line of the ASCII file
@@ -117,7 +120,7 @@ public class ASCIITileParser : MonoBehaviour
 
             for (int x = 0; x < characters.Length; x++)
             {
-                
+
                 GameObject newObj;
                 char c = characters[x];
 
@@ -129,31 +132,31 @@ public class ASCIITileParser : MonoBehaviour
                     case 'p': //pirate
                         newObj = Instantiate<GameObject>(pirate);
                         break;
-                    case '1': 
+                    case '1':
                         newObj = Instantiate<GameObject>(sandbarTopLeft);
                         break;
-                    case '2':  
+                    case '2':
                         newObj = Instantiate<GameObject>(sandbarTopMiddle);
-                        break;                    
+                        break;
                     case '3':
                         newObj = Instantiate<GameObject>(sandbarTopRight);
                         break;
-                    case '4': 
+                    case '4':
                         newObj = Instantiate<GameObject>(sandbarCenterLeft);
                         break;
-                    case '5': 
+                    case '5':
                         newObj = Instantiate<GameObject>(sandbarCenterMiddle);
-                        break;                    
-                    case '6': 
+                        break;
+                    case '6':
                         newObj = Instantiate<GameObject>(sandbarCenterRight);
                         break;
-                    case '7': 
+                    case '7':
                         newObj = Instantiate<GameObject>(sandbarBottomLeft);
                         break;
-                    case '8': 
+                    case '8':
                         newObj = Instantiate<GameObject>(sandbarBottomMiddle);
-                        break;                    
-                    case '9': 
+                        break;
+                    case '9':
                         newObj = Instantiate<GameObject>(sandbarBottomRight);
                         break;
                     case 'a':
@@ -224,17 +227,18 @@ public class ASCIITileParser : MonoBehaviour
                             case 1:
                                 Debug.Log("Switch");
                                 newObj = Instantiate<GameObject>(rock1);
-                                break; 
+                                break;
                             case 2:
                                 newObj = Instantiate<GameObject>(rock2);
-                                break; 
+                                break;
                             case 3:
                                 newObj = Instantiate<GameObject>(rock3);
-                                break; 
+                                break;
                             default:
                                 newObj = Instantiate<GameObject>(rock1);
                                 break;
                         }
+
                         break;
                     default:
                         newObj = null;
@@ -244,13 +248,62 @@ public class ASCIITileParser : MonoBehaviour
                 if (newObj != null)
                 {
                     newObj.transform.position = new Vector2(x * tileSize + xOffset, -y * tileSize + yOffset);
+                    if (newObj.name.Contains("Ship") && File.Exists(FILE_PATH_JSON))
+                    {
+                        newObj.transform.position = playerStartPos;
+                    }
+
                     newObj.GetComponent<SpriteRenderer>().sortingOrder = 0; //set the sort order so these are on the bottom
+                    if (newObj.name.Contains("Ship") || newObj.name.Contains("Pirate"))
+                    {
+                        newObj.GetComponent<SpriteRenderer>().sortingOrder = 2;
+                    }
+                    newObj.transform.parent = level.transform;
+                }
+
+            }
+        }
+        
+        //objectives
+        
+        string[] treasures = File.ReadAllLines(PATH_TO_OBJECTIVES);
+        for (int y = 0; y < treasures.Length; y++)
+        {
+            string currentLine = treasures[y]; //this is the current line of the ASCII file
+            char[] characters = currentLine.ToCharArray(); //we want to get every character of that file
+
+            for (int x = 0; x < characters.Length; x++)
+            {
+
+                GameObject newObj;
+                char c = characters[x];
+
+                switch (c)
+                {
+                    case '#':
+                        newObj = Instantiate<GameObject>(gold);
+                        break;
+                    default:
+                        newObj = null;
+                        break;
+                }
+                
+                if (newObj != null)
+                {
+                    newObj.transform.position = new Vector2(x * tileSize + xOffset, -y * tileSize + yOffset);
+                    newObj.GetComponent<SpriteRenderer>().sortingOrder = 1; //set the sort order so these are on the bottom
                     newObj.transform.parent = level.transform;
                 }
                 
             }
         }
-        
     }
-    
+
+    private void OnApplicationQuit()
+    {
+        Debug.Log("QUIT");
+        string jsonPosition = JsonUtility.ToJson(GameObject.FindWithTag("Player").transform.position, true);
+        Debug.Log(jsonPosition);
+        File.WriteAllText(FILE_PATH_JSON, jsonPosition);
+    }
 }
