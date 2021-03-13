@@ -46,8 +46,9 @@ public class BoatController : MonoBehaviour
             pirate.transform.position = _contactPoint.point;
             pirate.SetActive(true);
             disembark.SetActive(false);
-            GetComponent<BoatController>().enabled = false;
+            GameObject.FindWithTag("MainCamera").GetComponent<FollowPlayer>().player = pirate.gameObject;
             rb.velocity = Vector2.zero;
+            GetComponent<BoatController>().enabled = false;
         }
         
         

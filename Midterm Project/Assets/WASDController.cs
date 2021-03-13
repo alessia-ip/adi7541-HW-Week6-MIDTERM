@@ -31,6 +31,7 @@ public class WASDController : MonoBehaviour
             ship.GetComponent<PolygonCollider2D>().isTrigger = false;
             embark.SetActive(false);
             ship.GetComponent<BoatController>().enabled = true;
+            GameObject.FindWithTag("MainCamera").GetComponent<FollowPlayer>().player = ship.gameObject;
             this.gameObject.SetActive(false);
         }
 
