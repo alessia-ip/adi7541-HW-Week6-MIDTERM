@@ -2,7 +2,9 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
+using UnityEngine.UI;
 using UnityEngine.Windows;
 using File = System.IO.File;
 using Random = UnityEngine.Random;
@@ -13,6 +15,25 @@ public class ASCIITileParser : MonoBehaviour
     private int levelNum = 1;
 
     public float tileSize = 1; //this is based on the pixel size of the tile
+
+    public int goldAMT;
+
+    public int GoldAmt
+    {
+        get
+        {
+            return goldAMT;
+        }
+        set
+        {
+            goldAMT = value;
+            File.WriteAllText(PATH_TO_GOLD, goldAMT + "");
+            var dailySpots = GameObject.FindGameObjectsWithTag("GOLD").Length;
+            goldTXT.text = "Current gold:\n" + goldAMT + "\n \nTreasure remaining today:\n" + dailySpots;
+        }
+    }
+
+    public TextMeshProUGUI goldTXT; 
     
     //tile offsets
     public float xOffset;
@@ -27,6 +48,7 @@ public class ASCIITileParser : MonoBehaviour
     private string FILE_NAME_SAVE_TIME = "Time.txt";
     private string FILE_NAME_SAVE_GOLD = "Gold.txt";
     private const string DIR_LOGS = "/Logs/";
+    private string PATH_TO_GOLD;
     
     private string FILE_PATH_JSON;
 
@@ -90,6 +112,8 @@ public class ASCIITileParser : MonoBehaviour
         PATH_TO_OBJECTIVES = Application.dataPath + DIR + FILE_NAME_OBJECTIVES;
         PATH_TO_OBJECTIVES = PATH_TO_OBJECTIVES.Replace("Num", Random.Range(1,3) + "");
 
+        PATH_TO_GOLD = Application.dataPath + DIR_LOGS + FILE_NAME_SAVE_GOLD;
+        
         FILE_PATH_JSON = Application.dataPath + "/" + name + ".json";
         if (File.Exists(FILE_PATH_JSON))
         {
@@ -97,8 +121,21 @@ public class ASCIITileParser : MonoBehaviour
             Vector3 savedPos = JsonUtility.FromJson<Vector3>(jsonText);
             playerStartPos = savedPos; 
         }
+
         
         ShoreParser();
+        
+        if (!File.Exists(PATH_TO_GOLD))
+        {
+            File.Create(PATH_TO_GOLD);
+            GoldAmt = 0;
+            File.WriteAllText(PATH_TO_GOLD, GoldAmt + "");
+        }
+        else
+        {
+            GoldAmt = Int32.Parse(File.ReadAllText(PATH_TO_GOLD));
+        }
+        
     }
 
 
@@ -297,6 +334,8 @@ public class ASCIITileParser : MonoBehaviour
                 
             }
         }
+
+
     }
 
     private void OnApplicationQuit()

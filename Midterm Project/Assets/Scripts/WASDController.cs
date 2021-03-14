@@ -1,9 +1,12 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Net.Mime;
 using System.Numerics;
 using UnityEngine;
+using UnityEngine.UI;
 using Vector2 = UnityEngine.Vector2;
+using Random = UnityEngine.Random;
 
 public class WASDController : MonoBehaviour
 {
@@ -11,7 +14,6 @@ public class WASDController : MonoBehaviour
     private GameObject ship;
 
     public int contacts = 0;
-
 
     private ContactPoint2D contactPoint2D;
     
@@ -67,6 +69,15 @@ public class WASDController : MonoBehaviour
             embark.SetActive(true);
             ship = other.gameObject;
         }
+
+
+        if (other.name.Contains("Spot"))
+        {
+            GameObject.FindWithTag("Game manager").GetComponent<ASCIITileParser>().GoldAmt =
+                GameObject.FindWithTag("Game manager").GetComponent<ASCIITileParser>().GoldAmt + 10 * Random.Range(1, 3);
+            Destroy(other.gameObject);
+        }
+        
     }
     
     private void OnTriggerExit2D(Collider2D other)

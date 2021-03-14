@@ -6,6 +6,8 @@ TagManager:
   tags:
   - Shore
   - Disembark
+  - Game manager
+  - GOLD
   layers:
   - Default
   - TransparentFX
