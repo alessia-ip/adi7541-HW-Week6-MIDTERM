@@ -30,7 +30,7 @@ public class ASCIITileParser : MonoBehaviour
             goldAMT = value;
             File.WriteAllText(PATH_TO_GOLD, goldAMT + "");
             var dailySpots = GameObject.FindGameObjectsWithTag("GOLD").Length;
-            goldTXT.text = "Current gold:\n" + goldAMT + "\n \nTreasure remaining today:\n" + dailySpots;
+            goldTXT.text = "Current gold: " + goldAMT + "\n \nTreasure remaining today: " + dailySpots;
         }
     }
 
