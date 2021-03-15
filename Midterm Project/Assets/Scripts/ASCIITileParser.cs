@@ -5,14 +5,13 @@ using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
-using UnityEngine.Windows;
 using File = System.IO.File;
 using Random = UnityEngine.Random;
 
 
 public class ASCIITileParser : MonoBehaviour
 {
-    private int levelNum = 1;
+    private int levelNum = 0;
 
     public float tileSize = 1; //this is based on the pixel size of the tile
 
@@ -47,13 +46,15 @@ public class ASCIITileParser : MonoBehaviour
     //TODO add in a time tracker for how long the player has played for
     private string FILE_NAME_TERRAIN = "TerrainNum.txt";
     private string FILE_NAME_OBJECTIVES = "ObjectiveNum.txt";
-    private const string DIR = "/ASCII/";
+   // private const string DIR = "/ASCII/";
+    private const string DIR = "/Resources/";
     private string PATH_TO_TERRAIN;
     private string PATH_TO_OBJECTIVES;
 
     private string FILE_NAME_SAVE_TIME = "Time.txt";
     private string FILE_NAME_SAVE_GOLD = "Gold.txt";
-    private const string DIR_LOGS = "/Logs/";
+    //private const string DIR_LOGS = "/Logs/";
+    private const string DIR_LOGS = "/Resources/";
     private string PATH_TO_GOLD;
     
     private string FILE_PATH_JSON;
