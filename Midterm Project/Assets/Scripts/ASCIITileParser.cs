@@ -100,8 +100,6 @@ public class ASCIITileParser : MonoBehaviour
     
     [Header("Player Prefab")] 
     public GameObject playerBoatBlue;
-    public GameObject playerBoatRed;
-    public GameObject playerBoatYellow;
     public GameObject pirate;
 
     [Header("Object Prefabs")] 
@@ -109,6 +107,7 @@ public class ASCIITileParser : MonoBehaviour
     public GameObject rock1;
     public GameObject rock2;
     public GameObject rock3;
+    public GameObject pirateBoat;
 
     // Start is called before the first frame update
     void Start()
@@ -344,6 +343,9 @@ public class ASCIITileParser : MonoBehaviour
                 {
                     case '#': //x marks the spot tiles
                         newObj = Instantiate<GameObject>(gold);
+                        break;
+                    case '&':
+                        newObj = Instantiate<GameObject>(pirateBoat);
                         break;
                     default:
                         newObj = null;
